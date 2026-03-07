@@ -34,6 +34,7 @@ showAllcard();
 document.getElementById('open-btn')
 .addEventListener('click',function(){
 allCardContainer.classList.add('hidden');
+closedCardContainer.classList.add('hidden')
 fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues") 
    .then(res => res.json()) 
    .then(data => {
@@ -71,6 +72,7 @@ createDiv.innerHTML=`
  document.getElementById('closed-btn')
  .addEventListener('click',function(){
 allCardContainer.classList.add('hidden');
+openCardContainer.classList.add('hidden');
 fetch('https://phi-lab-server.vercel.app/api/v1/lab/issues')
 .then(res => res.json())
 .then(data =>{
