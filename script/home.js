@@ -6,6 +6,7 @@ const closedCardContainer =document.getElementById('closedCard-container')
 const searchContainer=document.getElementById("search-issue");
 const spinner = document.getElementById("spinner");
 const allTab =  document.getElementById("all-tab");
+const modal = document.getElementById('modal');
 // loading spinner
 const loadSpinner=(status)=>{
   if(status === true){
@@ -37,6 +38,7 @@ const addhidden=()=>{
   openCardContainer.classList.add('hidden');
  closedCardContainer.classList.add('hidden');
  searchContainer.classList.add('hidden');
+// modal.classList.add('hidden');
 }
 
 // git all btn
@@ -54,7 +56,7 @@ closedBtn.classList.remove('active')
 const openCard =(card)=>{
  const createDiv = document.createElement('div');
 createDiv.innerHTML=`
- <div class="issue card border-t-4 h-full border-green-600 shadow-md">
+ <div onclick="showDetails(${card.id})" class="issue card border-t-4 h-full border-green-600 shadow-md">
   <div class="border-b-1 border-gray-300">
   <div class="flex justify-between p-4">
     <img src="assets/Open-Status.png" alt="">
@@ -68,10 +70,16 @@ ${labels(card.labels)}
   </div>
   </div>
  </div>
+  <div class="flex justify-between items-center">
  <div class="p-5">
-  <p class="text-gray-500">#1 by john_doe</p>
-  <p  class="text-gray-500">1/15/2024</p>
+ <p class="text-gray-500">${card.author}</p>
+  <p  class="text-gray-500">${card.assignee}</p>
  </div>
+ <div class="p-5">
+ <p class="text-gray-500  text-[10px]">${card.createdAt}</p>
+  <p  class="text-gray-500  text-[10px]">${card.updatedAt}</p>
+ </div>
+  <div>
  </div>
  `;  
  return  createDiv;
@@ -95,16 +103,93 @@ ${labels(card.labels)}
   </div>
   </div>
  </div>
+ <div class="flex justify-between items-center">
  <div class="p-5">
-  <p class="text-gray-500">#1 by john_doe</p>
-  <p  class="text-gray-500">1/15/2024</p>
+ <p class="text-gray-500">${card.author}</p>
+  <p  class="text-gray-500">${card.assignee}</p>
  </div>
+ <div class="p-5">
+ <p class="text-gray-500 text-[10px]">${card.createdAt}</p>
+  <p  class="text-gray-500 text-[10px]">${card.updatedAt}</p>
+ </div>
+  <div>
  </div>
  `;  
  return createDiv;
  
 }
+// searchIssue
+const searchIssue= async(keyword)=>{
+  console.log(keyword);
+  const url =`https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${keyword}`;
+  const res=await fetch(url);
+  const data =await res.json();
+   const allCard = data.data;
+   const filterCard=allCard.filter(card =>card.title.toLowerCase().includes(keyword));
+   totalIssue.innerText=filterCard.length; 
+  filterCard.forEach(card=>{
+     if(card.status==='open') {
+const openDiv = openCard(card);
+ searchContainer.appendChild(openDiv);
+ 
+     }else if(card.status==='closed'){
+const closedDiv = closedCard(card);
+ searchContainer.appendChild(closedDiv);
 
+     }
+      
+   })
+
+loadSpinner(false);
+}
+// const showDetails= async(id)=>{
+//   modal.classList.remove("hidden")
+//   modal.innerHTML='';
+// const url=`https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`;
+// const res= await fetch(url);
+// const data = await res.json();
+// const card = data;
+// console.log(card);
+  
+  
+//   modal.innerHTML=`
+//   <button class="btn" onclick="my_modal_5.showModal()">open modal</button>
+// <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
+//   <div id="modal-content" class="modal-box">
+//    <div class="space-y-3">
+//         <h3 class="font-bold text-xl">${card.title}</h3>
+//         <div class="space-x-2">
+//           <span class="bg-green-600 text-white rounded-full px-3 py-1">Opened</span>
+//           <span class="text-gray-500">Opened by Fahim Ahmed,</span>
+//           <span class="text-gray-500">22/02/2026</span>
+//         </div>
+//         <div>
+//           <span class="text-yellow-600 bg-yellow-100 py-1 px-3 rounded-md"><i class="fa-regular fa-face-frown"></i>Bug</span>
+//           <span class="text-yellow-600 bg-yellow-100 py-1 px-3 rounded-md"><i class="fa-regular fa-face-frown"></i>help wanted</span>
+//         </div>
+//         <p class="text-gray-500">The navigation menu doesn't collapse properly on mobile devices. Need to fix the responsive behavior.</p>
+//       <div class="bg-slate-100 flex justify-between p-4">
+//         <div class="text-left">
+//           <p class="text-gray-500">Assignee:</p>
+//           <h4 class="font-bold">Fahim Ahmed</h4>
+//         </div>
+//         <div class="text-left">
+//           <p class="text-gray-500">Priority:</p>
+//           <span class="bg-red-500 text-white rounded-full px-3 py-1">High</span>
+//         </div>
+//       </div>
+//       </div>div class="modal-action">
+//       <form method="dialog">
+//         <!-- if there is a button in form, it will close the modal -->
+//         <button class="btn btn-primary">Close </button>
+//       </form>
+//     </div>
+//   </div>
+// </dialog>`;
+    
+  
+
+// }
 
 //show all issue
 const showAllcard = async ()=>{
@@ -128,9 +213,9 @@ const closedDiv = closedCard(card);
  allCardContainer.appendChild(closedDiv);
 
      }
-      loadSpinner(false);  
+      
     });  
-   
+   loadSpinner(false);  
 }
 showAllcard();
 
@@ -173,36 +258,22 @@ const closedDiv = closedCard(card);
     loadSpinner(false); 
 })
 
-
+// active searcbar
 const searchBtn = document.getElementById("search-btn");
 searchBtn.addEventListener('click',async function(){
-  const input = document.getElementById("search-keyword");
-  const keyword = input.value.trim().toLowerCase() ;
-  loadSpinner(true);
+  remove();
   addhidden();
+ loadSpinner(true);
   searchContainer.classList.remove('hidden');
   searchContainer.innerHTML='';
-  const allCard = await loadData();
-filterCard = allCard.filter(card => card.title.toLowerCase().includes(keyword))
-totalIssue.innerText=filterCard.length; 
-filterCard.forEach(card => {
-     if(card.status==='open') {
-const openDiv = openCard(card);
- searchContainer.appendChild(openDiv);
- 
-     } 
-     if(card.status==='closed'){
-const closedDiv = closedCard(card);
- searchContainer.appendChild(closedDiv);
-
-     }
-      loadSpinner(false);  
-    });  
-  
+  const input = document.getElementById("search-keyword");
+  const keyword = input.value.trim().toLowerCase() ;
+ await searchIssue(keyword);
 })
 
- 
 
+
+ 
 
 
 
