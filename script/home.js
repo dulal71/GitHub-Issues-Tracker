@@ -1,19 +1,34 @@
  //total Count
 const totalIssue = document.getElementById("total-issue");
- 
- 
-const allCardContainer =document.getElementById('allCard-container');
+ const allCardContainer =document.getElementById('allCard-container');
 const openCardContainer = document.getElementById('openCard-container');
 const closedCardContainer =document.getElementById('closedCard-container')
 
-const showAllcard =()=>{
+//load Data
+const loadData = async()=>{
+  const url = "https://phi-lab-server.vercel.app/api/v1/lab/issues";
+   const res = await fetch(url);
+   const data = await res.json();
+   console.log(data.data);
+  return data.data
+   
+}
+ 
+
+const addhidden=()=>{
+  allCardContainer.classList.add('hidden');
+  openCardContainer.classList.add('hidden');
+ closedCardContainer.classList.add('hidden');
+}
+
+const showAllcard = async ()=>{
 const allBtn = document.getElementById('all-btn');
 allBtn.classList.add('active');
+addhidden();
+allCardContainer.classList.remove('hidden');
 allCardContainer.innerHTML='';
-    fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues") 
-   .then(res => res.json()) 
-   .then(data=> {
-const allCard = data.data;
+const allCard = await loadData();
+console.log(allCard);
 totalIssue.innerText=allCard.length;
     allCard.forEach(card => {
      if(card.status==='open') {
@@ -23,7 +38,7 @@ totalIssue.innerText=allCard.length;
  closedCard(card);
      }
     });
-})
+
     
 }
 
@@ -32,13 +47,11 @@ showAllcard();
 
 //open card section
 document.getElementById('open-btn')
-.addEventListener('click',function(){
-allCardContainer.classList.add('hidden');
-closedCardContainer.classList.add('hidden')
-fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues") 
-   .then(res => res.json()) 
-   .then(data => {
-    const allCard = data.data;
+.addEventListener('click', async function(){
+  addhidden();
+openCardContainer.classList.remove('hidden');
+openCardContainer.innerHTML='';
+const allCard = await loadData();
    const openCard = allCard.filter(card => card.status ==='open');
    totalIssue.innerText=openCard.length;
  openCard.forEach(card=>{
@@ -66,17 +79,14 @@ createDiv.innerHTML=`
  openCardContainer.appendChild(createDiv);
  })
    })
-})
 
 //closed card section
  document.getElementById('closed-btn')
- .addEventListener('click',function(){
-allCardContainer.classList.add('hidden');
-openCardContainer.classList.add('hidden');
-fetch('https://phi-lab-server.vercel.app/api/v1/lab/issues')
-.then(res => res.json())
-.then(data =>{
-  const allCard = data.data;
+ .addEventListener('click',async function(){
+addhidden();
+closedCardContainer.classList.remove('hidden');
+closedCardContainer.innerHTML='';
+const allCard = await loadData();
    const closedCard = allCard.filter(card => card.status ==='closed');
    console.log(closedCard);
    totalIssue.innerText=closedCard.length;
@@ -107,7 +117,6 @@ createDiv.innerHTML=`
    })
 })
 
- })
  
 
 
