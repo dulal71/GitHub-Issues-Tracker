@@ -46,6 +46,7 @@
 </div> 
 </header>
 <main>
+  
   <!-- All button -->
   <section class="bg-white max-w-11/12 shadow-sm mx-auto mt-10 p-6">
     <div class=" flex gap-4">
@@ -70,7 +71,15 @@
   <span class="text-purple-500"><i class="fa-solid fa-circle"></i>Closed</span>
 </div>
  </section>
-<!-- showAll card -->
+
+ <!-- spinner -->
+<section id="spinner" class="max-w-11/12 text-center mx-auto my-10 p-6 hidden">
+   <!-- Open the modal using ID.showModal() method -->
+ <span class="loading loading-dots loading-xl"></span>
+  </section>
+  <!-- all tab -->
+<section id="all-tab">
+ <!-- showAll card -->
  <section id="allCard-container" class="bg-white max-w-11/12 mx-auto shadow-md p-5 grid grid-cols-1 md:grid-cols-4 gap-5">
 
  </section>
@@ -81,7 +90,7 @@
 <!-- show closed card -->
  <section id="closedCard-container" class="bg-white max-w-11/12 mx-auto shadow-md p-5 grid grid-cols-1 md:grid-cols-4 gap-5 hidden">
  </section>
-
+</section>
 </main>
 
 

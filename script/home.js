@@ -3,16 +3,32 @@ const totalIssue = document.getElementById("total-issue");
  const allCardContainer =document.getElementById('allCard-container');
 const openCardContainer = document.getElementById('openCard-container');
 const closedCardContainer =document.getElementById('closedCard-container')
-
+const spinner = document.getElementById("spinner");
+const allTab =  document.getElementById("all-tab");
+// loading spinner
+const loadSpinner=(status)=>{
+  if(status === true){
+    spinner.classList.remove('hidden')
+   allTab.classList.add('hidden');
+  }else{
+     spinner.classList.add('hidden')
+    allTab.classList.remove('hidden');
+  }
+}
 //load Data
 const loadData = async()=>{
   const url = "https://phi-lab-server.vercel.app/api/v1/lab/issues";
    const res = await fetch(url);
    const data = await res.json();
-  //  console.log(data.data);
+    console.log(data.data);
   return data.data
    
 }
+//create labels
+const labels=(labels)=>{
+   const createLabel =labels.map(label=> `<span class="text-yellow-600 bg-yellow-100 py-1 px-3 rounded-md"><i class="fa-regular fa-face-frown"></i>${label}</span>`)
+ return createLabel.join(' ');
+ }
  
 //add hidden class for all section
 const addhidden=()=>{
@@ -45,8 +61,9 @@ createDiv.innerHTML=`
   <div class="space-y-3 p-4"> 
     <h3 class="font-bold">${card.title}</h3>
   <p class="text-gray-500">${card.description}</p>
-  <span class="text-red-400 bg-red-100 py-1 px-3 rounded-md"><i class="fa-regular fa-face-frown"></i>Bug</span>
-  <span class="text-yellow-600 bg-yellow-100 py-1 px-3 rounded-md"><i class="fa-solid fa-life-ring"></i>Help wanted</span>
+ <div>
+${labels(card.labels)}
+  </div>
   </div>
  </div>
  <div class="p-5">
@@ -65,14 +82,15 @@ createDiv.innerHTML=`
  <div class="issue card border-t-4 border-purple-500 shadow-md">
   <div class="border-b-1 border-gray-300">
   <div class="flex justify-between p-4">
-    <img src="assets/Open-Status.png" alt="">
-    <span class="text-red-400 bg-red-100 px-5 rounded-lg">${card.priority}</span>
+    <img src="assets/Closed- Status .png" alt="Closed-icon">
+    <span class="text-gray-500 bg-gray-100 px-5 rounded-lg">${card.priority}</span>
   </div>
   <div class="space-y-3 p-4"> 
     <h3 class="font-bold">${card.title}</h3>
   <p class="text-gray-500">${card.description}</p>
-  <span class="text-red-400 bg-red-100 py-1 px-3 rounded-md"><i class="fa-regular fa-face-frown"></i>Bug</span>
-  <span class="text-yellow-600 bg-yellow-100 py-1 px-3 rounded-md"><i class="fa-solid fa-life-ring"></i>Help wanted</span>
+  <div>
+${labels(card.labels)}
+  </div>
   </div>
  </div>
  <div class="p-5">
@@ -88,6 +106,7 @@ createDiv.innerHTML=`
 
 //show all issue
 const showAllcard = async ()=>{
+  loadSpinner(true);
 remove();
 allBtn.classList.add('active');
 addhidden();
@@ -100,12 +119,16 @@ totalIssue.innerText=allCard.length;
      if(card.status==='open') {
 const openDiv = openCard(card);
  allCardContainer.appendChild(openDiv);
+ 
      } 
      if(card.status==='closed'){
 const closedDiv = closedCard(card);
  allCardContainer.appendChild(closedDiv);
+
      }
-    });    
+      loadSpinner(false);  
+    });  
+   
 }
 showAllcard();
 
@@ -113,6 +136,7 @@ showAllcard();
 // show open issue
 document.getElementById('open-btn')
 .addEventListener('click', async function(){
+  loadSpinner(true);
   remove();
   openBtn.classList.add('active');
   addhidden();
@@ -125,11 +149,13 @@ const allCard = await loadData();
   const openDiv=  openCard(card);
   openCardContainer.appendChild(openDiv);
    })
+    loadSpinner(false); 
    })
 
 //closed card section
  document.getElementById('closed-btn')
  .addEventListener('click',async function(){
+  loadSpinner(true); 
   remove();
   closedBtn.classList.add('active');
 addhidden();
@@ -137,12 +163,12 @@ closedCardContainer.classList.remove('hidden');
 closedCardContainer.innerHTML='';
 const allCard = await loadData();
    const closedCardArray = allCard.filter(card => card.status ==='closed');
-   console.log(closedCard);
    totalIssue.innerText=closedCardArray.length;
    closedCardArray.forEach(card =>{
 const closedDiv = closedCard(card);
  closedCardContainer.appendChild(closedDiv);
    })
+    loadSpinner(false); 
 })
 
  
