@@ -3,6 +3,7 @@ const totalIssue = document.getElementById("total-issue");
  const allCardContainer =document.getElementById('allCard-container');
 const openCardContainer = document.getElementById('openCard-container');
 const closedCardContainer =document.getElementById('closedCard-container')
+const searchContainer=document.getElementById("search-issue");
 const spinner = document.getElementById("spinner");
 const allTab =  document.getElementById("all-tab");
 // loading spinner
@@ -35,6 +36,7 @@ const addhidden=()=>{
   allCardContainer.classList.add('hidden');
   openCardContainer.classList.add('hidden');
  closedCardContainer.classList.add('hidden');
+ searchContainer.classList.add('hidden');
 }
 
 // git all btn
@@ -52,7 +54,7 @@ closedBtn.classList.remove('active')
 const openCard =(card)=>{
  const createDiv = document.createElement('div');
 createDiv.innerHTML=`
- <div class="issue card border-t-4 border-green-600 shadow-md">
+ <div class="issue card border-t-4 h-full border-green-600 shadow-md">
   <div class="border-b-1 border-gray-300">
   <div class="flex justify-between p-4">
     <img src="assets/Open-Status.png" alt="">
@@ -169,6 +171,34 @@ const closedDiv = closedCard(card);
  closedCardContainer.appendChild(closedDiv);
    })
     loadSpinner(false); 
+})
+
+
+const searchBtn = document.getElementById("search-btn");
+searchBtn.addEventListener('click',async function(){
+  const input = document.getElementById("search-keyword");
+  const keyword = input.value.trim().toLowerCase() ;
+  loadSpinner(true);
+  addhidden();
+  searchContainer.classList.remove('hidden');
+  searchContainer.innerHTML='';
+  const allCard = await loadData();
+filterCard = allCard.filter(card => card.title.toLowerCase().includes(keyword))
+totalIssue.innerText=filterCard.length; 
+filterCard.forEach(card => {
+     if(card.status==='open') {
+const openDiv = openCard(card);
+ searchContainer.appendChild(openDiv);
+ 
+     } 
+     if(card.status==='closed'){
+const closedDiv = closedCard(card);
+ searchContainer.appendChild(closedDiv);
+
+     }
+      loadSpinner(false);  
+    });  
+  
 })
 
  
