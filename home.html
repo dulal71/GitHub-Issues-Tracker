@@ -49,7 +49,7 @@
   <!-- All button -->
   <section class="bg-white max-w-11/12 shadow-sm mx-auto mt-10 p-6">
     <div class=" flex gap-4">
-<button id="all-btn" class="btn">All</button>
+<button id="all-btn" onclick="showAllcard()" class="btn">All</button>
 <button id="open-btn" class="btn">Open</button>
 <button id="closed-btn" class="btn">Closed</button>
     </div>
@@ -76,10 +76,10 @@
  </section>
 
 <!-- show open card -->
- <section id="openCard-container" class="bg-white max-w-11/12 mx-auto shadow-md p-5 grid grid-cols-1 md:grid-cols-4 gap-5">
+ <section id="openCard-container" class="bg-white max-w-11/12 mx-auto shadow-md p-5 grid grid-cols-1 md:grid-cols-4 gap-5 hidden">
  </section>
 <!-- show closed card -->
- <section id="closedCard-container" class="bg-white max-w-11/12 mx-auto shadow-md p-5 grid grid-cols-1 md:grid-cols-4 gap-5">
+ <section id="closedCard-container" class="bg-white max-w-11/12 mx-auto shadow-md p-5 grid grid-cols-1 md:grid-cols-4 gap-5 hidden">
  </section>
 
 </main>
