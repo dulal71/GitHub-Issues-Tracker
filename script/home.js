@@ -88,7 +88,7 @@ ${labels(card.labels)}
   ${new Date(card.createdAt).toLocaleString('en-US')}
 </p>
  <p class="text-gray-500 text-[10px]">
-  ${new Date(card.updatedAt).toLocaleString('en-US')}
+ ${new Date().toLocaleDateString('en-GB')}
 </p>
  
  </div>
@@ -132,7 +132,7 @@ ${labels(card.labels)}
   ${new Date(card.createdAt).toLocaleString('en-US')}
 </p>
  <p class="text-gray-500 text-[10px]">
-  ${new Date(card.updatedAt).toLocaleString('en-US')}
+  ${new Date().toLocaleDateString('en-GB')}
 </p>
  </div>
   <div>
@@ -179,8 +179,8 @@ modal.innerHTML=`
         <h3 class="font-bold text-xl">${card.title}</h3>
         <div class="space-x-2">
           <span class=" text-white rounded-full px-3 py-1 ${card.status === 'open' ? 'bg-green-600' : 'bg-red-600'}">${card.status}</span>
-          <span class="text-gray-500"><i class="fa-solid fa-circle-dot"></i>${card.assignee? card.assignee:"unknonwn"}</span>
-          <span class="text-gray-500"><i class="fa-solid fa-circle-dot"></i>22/02/2026</span>
+          <span class="text-gray-500"><i class="fa-regular fa-eye"></i>Opened by ${card.assignee? card.assignee:"unknonwn"}</span>
+          <span class=" text-sm text-gray-500"><i class="fa-regular fa-calendar-days"></i>${new Date().toLocaleDateString('en-GB')}</span>
         </div>
         <div>
       ${labels(card.labels)}  

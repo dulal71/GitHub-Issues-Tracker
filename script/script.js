@@ -15,14 +15,10 @@ if(passwordValue !=='admin123'){
     alert("Invalid Password");
     return;  
 }else{
-    alert('Login Successfully')
+    alert('Welcome to GitHub Issues Tracker')
      window.location.assign("home.html"); 
 }
 
  })
 
 
- function scope(){
-    let x = 'hello';
- }
- console.log(x);
