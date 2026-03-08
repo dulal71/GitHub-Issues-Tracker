@@ -157,8 +157,8 @@ loadSpinner(false);
 }
 
 const showDetails= async(id)=>{
-  console.log(id);
-  const modal= document.getElementById('modal-content');
+loadSpinner(true);
+const modal= document.getElementById('modal-content');
 const url=`https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`;
 const res= await fetch(url);
 const data = await res.json();
@@ -194,7 +194,8 @@ modal.innerHTML=`
       </div>
       </div>
      `;
-     document.getElementById('my_modal_5').showModal();
+   document.getElementById('my_modal_5').showModal();
+   loadSpinner(false);
 }
 
 //show all issue
