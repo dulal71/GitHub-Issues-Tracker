@@ -6,7 +6,7 @@ const closedCardContainer =document.getElementById('closedCard-container')
 const searchContainer=document.getElementById("search-issue");
 const spinner = document.getElementById("spinner");
 const allTab =  document.getElementById("all-tab");
-const modal = document.getElementById('modal');
+const input = document.getElementById("search-keyword");
 // loading spinner
 const loadSpinner=(status)=>{
   if(status === true){
@@ -51,6 +51,10 @@ allBtn.classList.remove('active')
 openBtn.classList.remove('active')
 closedBtn.classList.remove('active')
 }
+
+const totalCount=()=>{
+  
+}
 //create openCard
 
 const openCard =(card)=>{
@@ -64,7 +68,7 @@ createDiv.innerHTML=`
   </div>
   <div class="space-y-3 p-4"> 
     <h3 class="font-bold">${card.title}</h3>
-  <p class="text-gray-500">${card.description}</p>
+  <p class="text-gray-500">${card.description.slice(0,80)}</p>
  <div>
 ${labels(card.labels)}
   </div>
@@ -76,8 +80,13 @@ ${labels(card.labels)}
   <p  class="text-gray-500">${card.assignee}</p>
  </div>
  <div class="p-5">
- <p class="text-gray-500  text-[10px]">${card.createdAt}</p>
-  <p  class="text-gray-500  text-[10px]">${card.updatedAt}</p>
+ <p class="text-gray-500 text-[10px]">
+  ${new Date(card.createdAt).toLocaleString('en-US')}
+</p>
+ <p class="text-gray-500 text-[10px]">
+  ${new Date(card.updatedAt).toLocaleString('en-US')}
+</p>
+ 
  </div>
   <div>
  </div>
@@ -89,7 +98,7 @@ ${labels(card.labels)}
 const closedCard =(card)=>{
 const createDiv = document.createElement('div');
 createDiv.innerHTML=`
- <div class="issue card border-t-4 border-purple-500 shadow-md">
+ <div onclick="showDetails(${card.id})" class="issue card border-t-4 border-purple-500 shadow-md">
   <div class="border-b-1 border-gray-300">
   <div class="flex justify-between p-4">
     <img src="assets/Closed- Status .png" alt="Closed-icon">
@@ -97,7 +106,7 @@ createDiv.innerHTML=`
   </div>
   <div class="space-y-3 p-4"> 
     <h3 class="font-bold">${card.title}</h3>
-  <p class="text-gray-500">${card.description}</p>
+  <p class="text-gray-500">${card.description.slice(0,80)}</p>
   <div>
 ${labels(card.labels)}
   </div>
@@ -109,8 +118,12 @@ ${labels(card.labels)}
   <p  class="text-gray-500">${card.assignee}</p>
  </div>
  <div class="p-5">
- <p class="text-gray-500 text-[10px]">${card.createdAt}</p>
-  <p  class="text-gray-500 text-[10px]">${card.updatedAt}</p>
+ <p class="text-gray-500 text-[10px]">
+  ${new Date(card.createdAt).toLocaleString('en-US')}
+</p>
+ <p class="text-gray-500 text-[10px]">
+  ${new Date(card.updatedAt).toLocaleString('en-US')}
+</p>
  </div>
   <div>
  </div>
@@ -142,63 +155,58 @@ const closedDiv = closedCard(card);
 
 loadSpinner(false);
 }
-// const showDetails= async(id)=>{
-//   modal.classList.remove("hidden")
-//   modal.innerHTML='';
-// const url=`https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`;
-// const res= await fetch(url);
-// const data = await res.json();
-// const card = data;
-// console.log(card);
-  
-  
-//   modal.innerHTML=`
-//   <button class="btn" onclick="my_modal_5.showModal()">open modal</button>
-// <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
-//   <div id="modal-content" class="modal-box">
-//    <div class="space-y-3">
-//         <h3 class="font-bold text-xl">${card.title}</h3>
-//         <div class="space-x-2">
-//           <span class="bg-green-600 text-white rounded-full px-3 py-1">Opened</span>
-//           <span class="text-gray-500">Opened by Fahim Ahmed,</span>
-//           <span class="text-gray-500">22/02/2026</span>
-//         </div>
-//         <div>
-//           <span class="text-yellow-600 bg-yellow-100 py-1 px-3 rounded-md"><i class="fa-regular fa-face-frown"></i>Bug</span>
-//           <span class="text-yellow-600 bg-yellow-100 py-1 px-3 rounded-md"><i class="fa-regular fa-face-frown"></i>help wanted</span>
-//         </div>
-//         <p class="text-gray-500">The navigation menu doesn't collapse properly on mobile devices. Need to fix the responsive behavior.</p>
-//       <div class="bg-slate-100 flex justify-between p-4">
-//         <div class="text-left">
-//           <p class="text-gray-500">Assignee:</p>
-//           <h4 class="font-bold">Fahim Ahmed</h4>
-//         </div>
-//         <div class="text-left">
-//           <p class="text-gray-500">Priority:</p>
-//           <span class="bg-red-500 text-white rounded-full px-3 py-1">High</span>
-//         </div>
-//       </div>
-//       </div>div class="modal-action">
-//       <form method="dialog">
-//         <!-- if there is a button in form, it will close the modal -->
-//         <button class="btn btn-primary">Close </button>
-//       </form>
-//     </div>
-//   </div>
-// </dialog>`;
-    
-  
 
-// }
+const showDetails= async(id)=>{
+  console.log(id);
+  const modal= document.getElementById('modal-content');
+const url=`https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`;
+const res= await fetch(url);
+const data = await res.json();
+const card = data.data;
+console.log(card);
+modal.innerHTML=`
+ <div class="space-y-3">
+        <h3 class="font-bold text-xl">${card.title}</h3>
+        <div class="space-x-2">
+          <span class=" text-white rounded-full px-3 py-1 ${card.status === 'open' ? 'bg-green-600' : 'bg-red-600'}">${card.status}</span>
+          <span class="text-gray-500"><i class="fa-solid fa-circle-dot"></i>${card.assignee? card.assignee:"unknonwn"}</span>
+          <span class="text-gray-500"><i class="fa-solid fa-circle-dot"></i>22/02/2026</span>
+        </div>
+        <div>
+      ${labels(card.labels)}  
+        </div>
+        <p class="text-gray-500">${card.description}</p>
+      <div class="bg-slate-100 flex justify-between p-4 mb-4">
+        <div class="text-left">
+          <p class="text-gray-500">Assignee:</p>
+          <h4 class="font-bold">${card.author?card.author:'unknonwn'}</h4>
+        </div>
+        <div class="text-left">
+          <p class="text-gray-500">Priority:</p>
+          <span class="${
+    card.priority === "high" ? "bg-red-500" :
+    card.priority === "medium" ? "bg-yellow-300" :
+    card.priority === "low" ? "bg-gray-400" :
+    "bg-gray-400"
+  } text-white rounded-full px-3 py-1
+">${card.priority}</span>
+        </div>
+      </div>
+      </div>
+     `;
+     document.getElementById('my_modal_5').showModal();
+}
 
 //show all issue
-const showAllcard = async ()=>{
+const showAllIssue = async ()=>{
   loadSpinner(true);
 remove();
 allBtn.classList.add('active');
 addhidden();
 allCardContainer.classList.remove('hidden');
+input.value='';
 allCardContainer.innerHTML='';
+
 const allCard = await loadData();
 // console.log(allCard);
 totalIssue.innerText=allCard.length;
@@ -217,18 +225,20 @@ const closedDiv = closedCard(card);
     });  
    loadSpinner(false);  
 }
-showAllcard();
+showAllIssue();
 
 
 // show open issue
-document.getElementById('open-btn')
-.addEventListener('click', async function(){
-  loadSpinner(true);
+
+const showOpenIssue=async()=>{
+loadSpinner(true);
   remove();
   openBtn.classList.add('active');
   addhidden();
 openCardContainer.classList.remove('hidden');
 openCardContainer.innerHTML='';
+input.value='';
+
 const allCard = await loadData();
    const openCardArray = allCard.filter(card => card.status ==='open');
    totalIssue.innerText=openCardArray.length;
@@ -237,17 +247,21 @@ const allCard = await loadData();
   openCardContainer.appendChild(openDiv);
    })
     loadSpinner(false); 
-   })
+  
+}
+
+  
 
 //closed card section
- document.getElementById('closed-btn')
- .addEventListener('click',async function(){
-  loadSpinner(true); 
+ 
+  const showClosedIssue=async()=>{
+ loadSpinner(true); 
   remove();
   closedBtn.classList.add('active');
 addhidden();
 closedCardContainer.classList.remove('hidden');
 closedCardContainer.innerHTML='';
+input.value='';
 const allCard = await loadData();
    const closedCardArray = allCard.filter(card => card.status ==='closed');
    totalIssue.innerText=closedCardArray.length;
@@ -256,20 +270,23 @@ const closedDiv = closedCard(card);
  closedCardContainer.appendChild(closedDiv);
    })
     loadSpinner(false); 
-})
+  }
+ 
 
 // active searcbar
-const searchBtn = document.getElementById("search-btn");
-searchBtn.addEventListener('click',async function(){
-  remove();
+
+
+  const showSearchIssue =async()=>{
+ remove();
   addhidden();
  loadSpinner(true);
   searchContainer.classList.remove('hidden');
   searchContainer.innerHTML='';
-  const input = document.getElementById("search-keyword");
   const keyword = input.value.trim().toLowerCase() ;
  await searchIssue(keyword);
-})
+  }
+ 
+
 
 
 
