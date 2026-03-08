@@ -28,7 +28,7 @@ const loadData = async()=>{
 }
 //create labels
 const labels=(labels)=>{
-   const createLabel =labels.map(label=> `<span class="text-yellow-600 bg-yellow-100 py-1 px-3 rounded-md"><i class="fa-regular fa-face-frown"></i>${label}</span>`)
+   const createLabel =labels.map(label=> `<span class="text-yellow-800 bg-yellow-200 py-1 px-3 rounded-md"><i class="fa-regular fa-face-frown"></i>${label}</span>`)
  return createLabel.join(' ');
  }
  
@@ -52,9 +52,7 @@ openBtn.classList.remove('active')
 closedBtn.classList.remove('active')
 }
 
-const totalCount=()=>{
-  
-}
+
 //create openCard
 
 const openCard =(card)=>{
@@ -64,8 +62,14 @@ createDiv.innerHTML=`
   <div class="border-b-1 border-gray-300">
   <div class="flex justify-between p-4">
     <img src="assets/Open-Status.png" alt="">
-    <span class="text-red-400 bg-red-100 px-5 rounded-lg">${card.priority}</span>
-  </div>
+    <span class="${
+    card.priority === "high" ? "bg-red-300" :
+    card.priority === "medium" ? "bg-yellow-100" :
+    card.priority === "low" ? "bg-gray-100" :
+    "bg-gray-400"
+  } px-5 rounded-lg">${card.priority}</span>
+ 
+    </div>
   <div class="space-y-3 p-4"> 
     <h3 class="font-bold">${card.title}</h3>
   <p class="text-gray-500">${card.description.slice(0,80)}</p>
@@ -102,7 +106,13 @@ createDiv.innerHTML=`
   <div class="border-b-1 border-gray-300">
   <div class="flex justify-between p-4">
     <img src="assets/Closed- Status .png" alt="Closed-icon">
-    <span class="text-gray-500 bg-gray-100 px-5 rounded-lg">${card.priority}</span>
+  <span class="${
+    card.priority === "high" ? "bg-red-300" :
+    card.priority === "medium" ? "bg-yellow-100" :
+    card.priority === "low" ? "bg-gray-100" :
+    "bg-gray-400"
+  } px-5 rounded-lg">${card.priority}</span>
+ 
   </div>
   <div class="space-y-3 p-4"> 
     <h3 class="font-bold">${card.title}</h3>

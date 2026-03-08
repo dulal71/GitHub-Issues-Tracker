@@ -20,3 +20,9 @@ if(passwordValue !=='admin123'){
 }
 
  })
+
+
+ function scope(){
+    let x = 'hello';
+ }
+ console.log(x);
